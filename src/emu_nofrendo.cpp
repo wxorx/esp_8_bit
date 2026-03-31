@@ -195,6 +195,7 @@ int _audio_frequency;
 extern "C"
 void osd_getsoundinfo(sndinfo_t *info)
 {
+    printf("osd_getsoundinfo: %d\n", _audio_frequency);
     info->sample_rate = _audio_frequency;
     info->bps = 8;
 }
@@ -358,9 +359,116 @@ public:
         0,                      //GENERIC_MENU    0x0001
     };
 
+    /*
+
+    enum {
+        gen
+    };
+    sfcevent_hard_reset;
+                else if (d[9] == 0x0C) // both select+start pressed, reset on select + start held at the same time
+                    lastEvent = event_soft_reset;
+                else  if (d[3] == 0x00)
+                    lastEvent = event_joypad1_up;
+                else if (d[3] == 0xff)
+                    lastEvent = event_joypad1_down;
+                else if (d[2] == 0x00)
+                    lastEvent = event_joypad1_left;
+                else if (d[2] == 0xff)
+                    lastEvent = event_joypad1_right;
+                else if (d[9] & 0x04)
+                    lastEvent = event_joypad1_select;		
+                else if (d[9] & 0x08)
+                    lastEvent = event_joypad1_start;		
+                else if (d[8] & 0x01)
+                    lastEvent = event_joypad1_a; 
+                else if (d[8] & 0x02)
+                    lastEvent = event_joypad1_b;
+
+    
+                if (d[8] == 0xC0) // both L+R pressed
+                    lastEvent = event_hard_reset;
+                else if (d[9] == 0x0C) // both select+start pressed, reset on select + start held at the same time
+                    lastEvent = event_soft_reset;
+                else  if (d[3] == 0x00)
+                    lastEvent = event_joypad1_up;
+                else if (d[3] == 0xff)
+                    lastEvent = event_joypad1_down;
+                else if (d[2] == 0x00)
+                    lastEvent = event_joypad1_left;
+                else if (d[2] == 0xff)
+                    lastEvent = event_joypad1_right;
+                else if (d[9] & 0x04)
+                    lastEvent = event_joypad1_select;		
+                else if (d[9] & 0x08)
+                    lastEvent = event_joypad1_start;		
+                else if (d[8] & 0x01)
+                    lastEvent = event_joypad1_a; 
+                else if (d[8] & 0x02)
+                    lastEvent = event_joypad1_b;
+    */
+
     // raw HID data. handle WII/IR mappings
     virtual void hid(const uint8_t* d, int len)
-    {
+    {/*
+		printf("emu_nofrendo:hid %d: [", len);
+		for (int i = 0; i < len; i++) {
+			printf("%02X", d[i]);
+		}
+		printf("]\n");
+    */
+		static int lastEvent = -1;
+
+//        if (d[0] != 0x32 && d[0] != 0x42)
+//            return;
+		if (!(d[0] == 0x03 && d[1] == 0x0F))
+			return;
+            
+        if (d[2] == 0x7F &&
+            d[3] == 0x7F &&
+            d[3] == 0x7F &&
+            d[4] == 0x7F &&
+            d[5] == 0x7F &&            
+            d[6] == 0x00 &&
+            d[7] == 0x00 &&
+            d[8] == 0x00 &&
+            d[9] == 0x00)
+            {
+                if (-1 != lastEvent) {
+                    pad(0, lastEvent);
+                    lastEvent = -1;
+                }
+            } 
+            else
+            {
+#if 1
+                lastEvent = -1;
+
+                if (d[8] == 0xC0) // both L+R pressed
+                    lastEvent = event_hard_reset;
+                else if (d[9] == 0x0C) // both select+start pressed, reset on select + start held at the same time
+                    lastEvent = event_soft_reset;
+                else  if (d[3] == 0x00)
+                    lastEvent = event_joypad1_up;
+                else if (d[3] == 0xff)
+                    lastEvent = event_joypad1_down;
+                else if (d[2] == 0x00)
+                    lastEvent = event_joypad1_left;
+                else if (d[2] == 0xff)
+                    lastEvent = event_joypad1_right;
+                else if (d[9] & 0x04)
+                    lastEvent = event_joypad1_select;		
+                else if (d[9] & 0x08)
+                    lastEvent = event_joypad1_start;		
+                else if (d[8] & 0x01)
+                    lastEvent = event_joypad1_a; 
+                else if (d[8] & 0x02)
+                    lastEvent = event_joypad1_b;		
+
+                if (lastEvent != -1)
+                    pad(1, lastEvent);
+
+        } // lastEvent
+#else
         if (d[0] != 0x32 && d[0] != 0x42)
             return;
         bool ir = *d++ == 0x42;
@@ -385,6 +493,7 @@ public:
                 p >>= 1;
             }
         }
+#endif
     }
 
     /*

@@ -997,6 +997,7 @@ void gui_start(Emu* emu, const char* path)
 {
     _gui._emu = emu;
     _gui._overlay = &_overlay;
+    printf("gui_start:%s\n", path);
     _gui.insert_default(path);
     _overlay.init(emu->video_buffer(),emu->width,emu->height,emu->flavor);
 }
@@ -1008,12 +1009,14 @@ void gui_update()
 
     uint8_t buf[64];
     int n = hid_get(buf,sizeof(buf));    // called from emulation loop
+    //printf("gui_update->hid_get:%d\n", n);
     if (n > 0)
         gui_hid(buf,n);
-    
+    /*
     n = get_hid_ir(buf);
     if (n > 0)
         gui_hid(buf,n);
+        */
 }
 
 void gui_key(int keycode, int pressed, int mods)
@@ -1053,6 +1056,7 @@ static void keyboard(const uint8_t* d, int len)
 static int _last_pad = 0;
 static void pad_key(int mask, int state, int key)
 {
+    printf("pad_key %x %x %d\n", (_last_pad & mask), (state & mask), key);
     if ((_last_pad & mask) == (state & mask))
         return;
     gui_key(key,state & mask,0);
@@ -1084,27 +1088,61 @@ static void ir(const uint8_t* j, int len)
 
 void gui_hid(const uint8_t* hid, int len)  // Parse HID event
 {
-    if (hid[0] != 0xA1)
-        return;
-    /*
+
+    printf("gui_hid:");
     for (int i = 0; i < len; i++)
         printf("%02X",hid[i]);
     printf("\n");
-    */
+    if (hid[0] != 0xA1)
+        return;    
     switch (hid[1]) {
         case 0x01: keyboard(hid+1,len-1);   break;   // parse keyboard and maintain 1 key state
         case 0x32: wii();                   break;   // parse wii stuff: generic?
         case 0x42: ir(hid+2,len);           break;   // ir joy
+        case 0x03: {
+           // printf("gui_hid unhandled\n");
+/*
+            if (hid[8] == 0xC0) // both L+R pressed
+                pad_key(0xC0, hid[8], 58); // event_hard_reset;
+            else if (hid[9] == 0x0C) // both select+start pressed, reset on select + start held at the same time
+                pad_key(0x0C, hid[9], ); // event_soft_reset;
+            else  
+*/
+            if (hid[4] == 0x00) {
+                printf("UP\n");
+                pad_key(0x007f, hid[4] << 8 | hid[5], 82); // event_joypad1_up;
+            } else if (hid[4] == 0xff)
+                pad_key(0xff7f, hid[4] << 8 | hid[5], 81); // event_joypad1_down;
+            else if (hid[3] == 0x00)
+                pad_key(0x0f00, hid[2] << 8 | hid[3], 80); // event_joypad1_left;
+            else if (hid[3] == 0xff)
+                pad_key(0x0fff, hid[2] << 8 | hid[3], 79); // event_joypad1_right;
+                /*
+            else if (hid[9] & 0x04)
+                pad_key(0xff, hid[2], ); // event_joypad1_select;		
+            else if (hid[9] & 0x08)
+                pad_key(0xff, hid[2], ); // event_joypad1_start;		
+                */
+
+            else if (hid[9] & 0x08)
+                pad_key(0x08, hid[9], 58); // event_joypad1_x; // X shows up menu 
+            else if (hid[9] & 0x01)
+                pad_key(0x01, hid[9], 40); // event_joypad1_a;	
+               
+
+        } break;
     }
     _gui._emu->hid(hid+1,len-1);    // send raw events
 }
 
 void gui_msg(const char* msg)         // temporarily display a msg
 {
+    printf("gui_msg:%s\n", msg);
     _gui.msg(msg);
 }
 
 void sys_msg(const char* msg)          // temporarily display a msg
 {
+    printf("sys_msg:%s\n", msg);
     gui_msg(msg);
 }

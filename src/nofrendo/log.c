@@ -105,13 +105,14 @@ int log_print(const char *string)
 
    return 0;
 }
-
+#if 0
 int log_printf(const char *format, ... )
 {
    UNUSED(format);
 
    return 0; /* should be number of chars written */
 }
+#endif
 #endif /* !NOFRENDO_DEBUG */
 
 void log_chain_logfunc(int (*func)(const char *string))

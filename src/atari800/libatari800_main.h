@@ -14,4 +14,6 @@ extern jmp_buf libatari800_cpu_crash;
 
 void LIBATARI800_Frame(void);
 
+int UI_SelectCartType(int k);
+void UI_Run(void);
 #endif /* LIBATARI800_VIDEO_H_ */

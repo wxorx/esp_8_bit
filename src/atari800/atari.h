@@ -123,7 +123,7 @@ extern int Atari800_turbo;
 extern int Atari800_start_in_monitor;
 
 /* Initializes Atari800 emulation core. */
-int Atari800_Initialise(int *argc, char *argv[]);
+int Atari800_Initialise(int *argc, const char *argv[]);
 
 /* Emulates one frame (1/50sec for PAL, 1/60sec for NTSC). */
 void Atari800_Frame(void);

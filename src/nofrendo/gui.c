@@ -584,7 +584,7 @@ void gui_frame(bool draw)
    }
 }
 
-void gui_sendmsg(int color, char *format, ...)
+void gui_sendmsg(int color, const char *format, ...)
 {
    va_list arg;
    va_start(arg, format);

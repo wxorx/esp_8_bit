@@ -36,6 +36,8 @@
 #include "nes_pal.h"
 #include "nesstate.h"
 
+#define FUNC_EVENT_TRACE(code)  printf("%s:%d\n", __FUNCTION__, code);
+
 /* pointer to our current system's event handler table */
 static event_t *system_events = NULL;
 
@@ -46,233 +48,272 @@ static nesinput_t kb_alt_input = { INP_JOYPAD1, 0 };
 static void func_event_quit(int code)
 {
    UNUSED(code);
+   FUNC_EVENT_TRACE(code);
    main_quit();
 }
 
 static void func_event_insert(int code)
 {
    UNUSED(code);
+   FUNC_EVENT_TRACE(code);
    /* TODO: after the GUI */
 }
 
 static void func_event_eject(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       main_eject();
 }
 
 static void func_event_togglepause(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       nes_togglepause();
 }
 
 static void func_event_soft_reset(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code) 
       nes_reset(SOFT_RESET);
 }
 
 static void func_event_hard_reset(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       nes_reset(HARD_RESET);
 }
 
 static void func_event_snapshot(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_savesnap();
 }
 
 static void func_event_toggle_frameskip(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_togglefs();
 }
 
 static void func_event_state_save(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       state_save();
 }
 
 static void func_event_state_load(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       state_load();
 }
 
 static void func_event_state_slot_0(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       state_setslot(0);
 }
 
 static void func_event_state_slot_1(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code) 
       state_setslot(1);
 }
 
 static void func_event_state_slot_2(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code) 
       state_setslot(2);
 }
 
 static void func_event_state_slot_3(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       state_setslot(3);
 }
 
 static void func_event_state_slot_4(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       state_setslot(4);
 }
 
 static void func_event_state_slot_5(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code) 
       state_setslot(5);
 }
 
 static void func_event_state_slot_6(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code) 
       state_setslot(6);
 }
 
 static void func_event_state_slot_7(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code) 
       state_setslot(7);
 }
 
 static void func_event_state_slot_8(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       state_setslot(8);
 }
 
 static void func_event_state_slot_9(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       state_setslot(9);
 }
 
 static void func_event_gui_toggle_oam(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_toggleoam();
 }
 
 static void func_event_gui_toggle_wave(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_togglewave();
 }
 
 static void func_event_gui_toggle_pattern(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_togglepattern();
 }
 
 static void func_event_gui_pattern_color_up(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_incpatterncol();
 }
 
 static void func_event_gui_pattern_color_down(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_decpatterncol();
 }
 
 static void func_event_gui_toggle_fps(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_togglefps();
 }
 
 static void func_event_gui_display_info(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_displayinfo();
 }
 
 static void func_event_gui_toggle(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_togglegui();
 }
 
 static void func_event_toggle_channel_0(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_toggle_chan(0);
 }
 
 static void func_event_toggle_channel_1(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_toggle_chan(1);
 }
 
 static void func_event_toggle_channel_2(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_toggle_chan(2);
 }
 
 static void func_event_toggle_channel_3(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_toggle_chan(3);
 }
 
 static void func_event_toggle_channel_4(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_toggle_chan(4);
 }
 
 static void func_event_toggle_channel_5(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_toggle_chan(5);
 }
 
 static void func_event_set_filter_0(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_setfilter(0);
 }
 
 static void func_event_set_filter_1(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_setfilter(1);
 }
 
 static void func_event_set_filter_2(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_setfilter(2);
 }
 
 static void func_event_toggle_sprites(int code)
 {
+   FUNC_EVENT_TRACE(code);
    if (INP_STATE_MAKE == code)
       gui_togglesprites();
 }
 
 static void func_event_palette_hue_up(int code)
 {
+   FUNC_EVENT_TRACE(code);
    /* make sure we don't have a VS game */
    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
       return;
@@ -286,6 +327,7 @@ static void func_event_palette_hue_up(int code)
 
 static void func_event_palette_hue_down(int code)
 {
+   FUNC_EVENT_TRACE(code);
    /* make sure we don't have a VS game */
    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
       return;
@@ -299,6 +341,7 @@ static void func_event_palette_hue_down(int code)
 
 static void func_event_palette_tint_up(int code)
 {
+   FUNC_EVENT_TRACE(code);
    /* make sure we don't have a VS game */
    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
       return;
@@ -312,6 +355,7 @@ static void func_event_palette_tint_up(int code)
 
 static void func_event_palette_tint_down(int code)
 {
+   FUNC_EVENT_TRACE(code);
    /* make sure we don't have a VS game */
    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
       return;
@@ -325,6 +369,7 @@ static void func_event_palette_tint_down(int code)
 
 static void func_event_palette_set_default(int code)
 {
+   FUNC_EVENT_TRACE(code);
    /* make sure we don't have a VS game */
    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
       return;
@@ -335,6 +380,7 @@ static void func_event_palette_set_default(int code)
 
 static void func_event_palette_set_shady(int code)
 {
+   FUNC_EVENT_TRACE(code);
    /* make sure we don't have a VS game */
    if (nes_getcontextptr()->rominfo->flags & ROM_FLAG_VERSUS)
       return;
@@ -345,94 +391,114 @@ static void func_event_palette_set_shady(int code)
 
 static void func_event_joypad1_a(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_input, code, INP_PAD_A);
 }
 
 static void func_event_joypad1_b(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_input, code, INP_PAD_B);
 }
 
 static void func_event_joypad1_start(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_input, code, INP_PAD_START);
 }
 
 static void func_event_joypad1_select(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_input, code, INP_PAD_SELECT);
 }
 
 static void func_event_joypad1_up(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_input, code, INP_PAD_UP);
 }
 
 static void func_event_joypad1_down(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_input, code, INP_PAD_DOWN);
 }
 
 static void func_event_joypad1_left(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_input, code, INP_PAD_LEFT);
 }
 
 static void func_event_joypad1_right(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_input, code, INP_PAD_RIGHT);
 }
 
 static void func_event_joypad2_a(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_alt_input, code, INP_PAD_A);
 }
 
 static void func_event_joypad2_b(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_alt_input, code, INP_PAD_B);
 }
 
 static void func_event_joypad2_start(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_alt_input, code, INP_PAD_START);
 }
 
 static void func_event_joypad2_select(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_alt_input, code, INP_PAD_SELECT);
 }
 
 static void func_event_joypad2_up(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_alt_input, code, INP_PAD_UP);
 }
 
 static void func_event_joypad2_down(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_alt_input, code, INP_PAD_DOWN);
 }
 
 static void func_event_joypad2_left(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_alt_input, code, INP_PAD_LEFT);
 }
 
 static void func_event_joypad2_right(int code)
 {
+   FUNC_EVENT_TRACE(code);
    input_event(&kb_alt_input, code, INP_PAD_RIGHT);
 }
 
 static void func_event_songup(int code)
 {
+   FUNC_EVENT_TRACE(code);
 }
+
 
 static void func_event_songdown(int code)
 {
+   FUNC_EVENT_TRACE(code);
 }
 
 static void func_event_startsong(int code)
 {
+   FUNC_EVENT_TRACE(code);
 }
 
 /* NES events */

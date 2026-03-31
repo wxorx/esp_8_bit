@@ -379,7 +379,7 @@ static void PreInitialise(void)
 #endif
 }
 
-int Atari800_Initialise(int *argc, char *argv[])
+int Atari800_Initialise(int *argc, const char * argv[])
 {
 	int i, j;
 	const char *run_direct = NULL;

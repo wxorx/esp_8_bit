@@ -15,9 +15,9 @@
 ** SOFTWARE.
 */
 
-#define VIDEO_PIN   26
-#define AUDIO_PIN   18  // can be any pin
-#define IR_PIN      0   // TSOP4838 or equivalent on any pin if desired
+#define VIDEO_PIN   25
+#define AUDIO_PIN   26  // can be any pin
+//#define IR_PIN      0   // TSOP4838 or equivalent on any pin if desired
 
 int _pal_ = 0;
 
@@ -167,7 +167,12 @@ void video_init_hw(int line_width, int samples_per_cc)
     //                   |
     //                   v gnd
 
-    ledcSetup(0,2000000,7);    // 625000 khz is as fast as we go w 7 bits
+    //ledcSetup(0,2000000,7);    // 625000 khz is as fast as we go w 7 bits
+    //ledcSetup(0,1000000,7);    // 625000 khz is as fast as we go w 7 bits
+    //ledcSetup(0,15720,7);
+    //ledcSetup(0,125760,7);
+    //ledcSetup(0,251520,7);
+    ledcSetup(0,625000,7);
     ledcAttachPin(AUDIO_PIN, 0);
     ledcWrite(0,0);
 
@@ -366,11 +371,12 @@ void video_init(int samples_per_cc, int machine, const uint32_t* palette, int nt
 void pal_init()
 {
     int cc_width = 4;
-    _sample_rate = PAL_FREQUENCY*cc_width/1000000.0;       // DAC rate in mhz
-    _line_width = PAL_COLOR_CLOCKS_PER_SCANLINE*cc_width;
+   // _sample_rate = 16;//13.3333;//16;//17.5;//PAL_FREQUENCY*cc_width/1000000.0;       // DAC rate in mhz
+   _sample_rate = 16;      // DAC rate in mhz
+    _line_width = (PAL_COLOR_CLOCKS_PER_SCANLINE*cc_width);
     _line_count = PAL_LINES;
-    _hsync_short = usec(2);
-    _hsync_long = usec(30);
+    _hsync_short = usec(2.35);//2);
+    _hsync_long = usec(27.3);//30);
     _hsync = usec(4.7);
     _burst_start = usec(5.6);
     _burst_width = (int)(10*cc_width + 4) & 0xFFFE;

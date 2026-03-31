@@ -429,7 +429,7 @@ void nes_reset(int reset_type)
    nes6502_reset();
 
    nes.scanline = 241;
-
+   printf("nes_reset %s\n",(HARD_RESET == reset_type) ? "powered on" : "soft reset");
    //gui_sendmsg(GUI_GREEN, "NES %s",(HARD_RESET == reset_type) ? "powered on" : "reset");
 }
 

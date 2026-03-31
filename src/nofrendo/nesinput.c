@@ -165,7 +165,7 @@ void input_register(nesinput_t *input)
 void input_event(nesinput_t *input, int state, int value)
 {
    ASSERT(input);
-
+   
    if (state == INP_STATE_MAKE)
       input->data |= value;   /* OR it in */
    else /* break state */

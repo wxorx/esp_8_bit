@@ -23,7 +23,7 @@
 ** Note: all architectures should call these functions
 ** $Id: nofrendo.c,v 1.3 2001/04/27 14:37:11 neil Exp $
 */
-
+#include "string.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "noftypes.h"
@@ -213,7 +213,7 @@ int nofrendo_main(int argc, char *argv[])
    
    if (log_init())
       return -1;
-
+   printf("nofrendo_main\n");
    event_init();
 
    return osd_main(argc, argv);
