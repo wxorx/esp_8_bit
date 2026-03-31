@@ -13,27 +13,26 @@
 ** ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
 ** SOFTWARE.
 */
-
+#include "Arduino.h"
 #include "esp_system.h"
 #include "esp_int_wdt.h"
 #include "esp_spiffs.h"
-
-#define PERF  // some stats about where we spend our time
-#include "src/emu.h"
-#include "src/video_out.h"
+ 
+//#define PERF  // some stats about where we spend our time
+#include "emu.h"
+#include "video_out.h"
 
 // esp_8_bit
 // Atari 8 computers, NES and SMS game consoles on your TV with nothing more than a ESP32 and a sense of nostalgia
 // Supports NTSC/PAL composite video, Bluetooth Classic keyboards and joysticks
 
 //  Choose one of the video standards: PAL,NTSC
-#define VIDEO_STANDARD NTSC
+#define VIDEO_STANDARD PAL
 
 //  Choose one of the following emulators: EMU_NES,EMU_SMS,EMU_ATARI
-#define EMULATOR EMU_ATARI
-
+#define EMULATOR EMU_NES
 //  Many emus work fine on a single core (S2), file system access can cause a little flickering
-//  #define SINGLE_CORE
+//#define SINGLE_CORE
 
 // The filesystem should contain folders named for each of the emulators i.e.
 //    atari800
@@ -86,7 +85,7 @@ void emu_loop()
 void emu_task(void* arg)
 {
     printf("emu_task %s running on core %d at %dmhz\n",
-      _emu->name.c_str(),xPortGetCoreID(),rtc_clk_cpu_freq_value(rtc_clk_cpu_freq_get()));
+      _emu->name.c_str(),xPortGetCoreID(),getCpuFrequencyMhz());
     emu_init();
     for (;;)
       emu_loop();
@@ -110,12 +109,25 @@ esp_err_t mount_filesystem()
   return e;
 }
 
+/*
+#ifndef LED_BUILTIN
+#define LED_BUILTIN 2
+#endif
+*/
 void setup()
 { 
-  rtc_clk_cpu_freq_set(RTC_CPU_FREQ_240M);  
+    if (!setCpuFrequencyMhz(240)){
+        printf("failed to set CPU frequency\n");    
+    } else {
+        printf("CPU frequency set to 240 MHz\n");    
+    }    
   mount_filesystem();                       // mount the filesystem!
   _emu = NewEmulator();                     // create the emulator!
   hid_init("emu32");                        // bluetooth hid on core 1!
+
+
+  //pinMode(LED_BUILTIN, OUTPUT);
+  //digitalWrite(LED_BUILTIN, HIGH);
 
   #ifdef SINGLE_CORE
   emu_init();
